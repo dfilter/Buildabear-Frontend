@@ -3,35 +3,34 @@
     <b-row>
       <b-col md="12">
         <div class="text-center mt-3">
-          <h1>Welcome to Buildabear</h1>
+          <h1></h1>
           <p>Click on one of the games below to navigate to it</p>
         </div>
         <b-row>
-          <b-col md="3" v-for="(game, index) in games" :key="index">
-            <a :href="'/' + game.game_id">
+          <b-col md="6">
+            <nuxt-link :to="$route.fullPath +'/forum'">
               <b-card
                   no-body
                   :img-src="game.game_image"
                   img-alt="Image"
                   img-top
                   tag="article"
-                  style="max-width: 20rem;"
                   class="mb-4 text-center"
-                  :footer="game.game_name"
+                  footer="Forum Posts"
                   footer-tag="footer">
               </b-card>
-            </a>
+            </nuxt-link>
           </b-col>
-          <b-col md="3">
-            <nuxt-link to="/creategame">
+          <b-col md="6">
+            <nuxt-link :to="$route.fullPath + '/builds'">
               <b-card
                   no-body
+                  :img-src="game.game_image"
                   img-alt="Image"
                   img-top
                   tag="article"
-                  style="max-width: 20rem;"
                   class="mb-4 text-center"
-                  footer="Create Game"
+                  footer="Build Guids"
                   footer-tag="footer">
               </b-card>
             </nuxt-link>
@@ -46,14 +45,16 @@
 export default {
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/games")
-      .then(response => {
-        context.store.commit('mutateGames', response.games)
-        return {
-          games: response.games
-        }
+      .$get("http://127.0.0.1:5000/game", {
+        params: { game_id: context.params.gameId }
       })
-      .catch(error => console.log(error));
+      .then(response => {
+        context.store.commit('mutateGame', response.game)
+        return {
+          game: response.game
+        };
+      })
+      .catch(error => console.log(error))
   }
-};
+}
 </script>

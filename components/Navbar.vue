@@ -1,12 +1,15 @@
 <template>
   <b-navbar toggleable="md" type="dark" variant="info">
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-    <b-navbar-brand href="#">Buildabear</b-navbar-brand>
+    <b-navbar-brand href="/">Buildabear</b-navbar-brand>
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
-        <b-nav-item href="#">Games</b-nav-item>
-        <b-nav-item href="#">Builds</b-nav-item>
-        <b-nav-item href="#">Forums</b-nav-item>
+        <b-nav-item-dropdown text="Game" right>
+          <b-dropdown-item 
+              v-for="(game, index) in games" 
+              :key="index" 
+              :href="'/' + game.game_id">{{ game.game_name }}</b-dropdown-item>
+        </b-nav-item-dropdown>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -21,16 +24,18 @@
           <b-dropdown-item 
               v-for="(item, index) in searchBy" 
               :key="index" 
-              :href="item.href">{{ item.text }}</b-dropdown-item>
+              @click="changeOrderBy(item)">{{ item.text }}</b-dropdown-item>
         </b-nav-item-dropdown>
 
-        <b-nav-item-dropdown right>
+        <b-nav-item-dropdown right text="Username">
           <!-- Using button-content slot -->
           <template slot="button-content">
             <em>{{ user.userName }}</em>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">{{ signInState.text }}</b-dropdown-item>
+          <b-dropdown-item 
+              v-if="signInState.signedIn"
+              :href="profileUrl">Profile</b-dropdown-item>
+          <b-dropdown-item href="/login">{{ signInState.text ? signInState.text : 'Sign In' }}</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -42,20 +47,38 @@ export default {
   data() {
     return {
       searchBy: [
-        { text: "Build Name", href: 1 },
-        { text: "Date Created", href: 2 },
-        { text: "Rating", href: 3 },
-        { text: "...", href: 4 }
+        { text: "Author", order: null, desending: true },
+        { text: "Build Name", order: null, desending: true },
+        { text: "Newest", order: "date_posted", desending: true },
+        { text: "Oldest", order: "date_posted", desending: false },
+        { text: "Highest Rated", order: "up_vote", desending: true },
+        { text: "Lowest Rated", order: "down_vote", desending: false },
+        { text: "Highest Views", order: "views", desending: true },
+        { text: "Lowest Views", order: "views", desending: false }
       ],
+      orderBy: { text: "Build Name", order: null, desending: true },
       user: {
-        userName: "Username",
-        userId: 0
+        userName: "",
+        userId: null
       },
       signInState: {
         text: "Sign In",
         signedIn: false
       }
     };
+  },
+  methods: {
+    changeOrderBy(obj) {
+      this.orderBy = obj;
+    }
+  },
+  computed: {
+    profileUrl() {
+      return "/profile/" + this.user.userId;
+    },
+    games() {
+      return this.$store.getters.getGames;
+    }
   }
 };
 </script>

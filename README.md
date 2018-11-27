@@ -1,6 +1,6 @@
-# buildabear-frontend
+# Buildabear-Frontend
 
-> Frontend for buildabear capstone application 2018
+> Frontend for Mohawk College capstone
 
 ## Build Setup
 
