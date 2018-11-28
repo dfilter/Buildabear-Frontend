@@ -27,16 +27,16 @@
               @click="changeOrderBy(item)">{{ item.text }}</b-dropdown-item>
         </b-nav-item-dropdown>
 
-        <b-nav-item-dropdown right text="Username">
+        <b-nav-item-dropdown right v-if="isLoggedin">
           <!-- Using button-content slot -->
           <template slot="button-content">
-            <em>{{ user.userName }}</em>
+            <em>{{ user.username }}</em>
           </template>
           <b-dropdown-item 
-              v-if="signInState.signedIn"
-              :href="profileUrl">Profile</b-dropdown-item>
-          <b-dropdown-item href="/login">{{ signInState.text ? signInState.text : 'Sign In' }}</b-dropdown-item>
+              :href="'/profiles/' + user.user_id">Profile</b-dropdown-item>
+          <b-dropdown-item @click="logout()">Logout</b-dropdown-item>
         </b-nav-item-dropdown>
+        <b-nav-item href="/login">Login</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -56,28 +56,37 @@ export default {
         { text: "Highest Views", order: "views", desending: true },
         { text: "Lowest Views", order: "views", desending: false }
       ],
-      orderBy: { text: "Build Name", order: null, desending: true },
-      user: {
-        userName: "",
-        userId: null
-      },
-      signInState: {
-        text: "Sign In",
-        signedIn: false
-      }
+      orderBy: { text: "Build Name", order: null, desending: true }
     };
+  },
+  props: {
+    games: {
+      type: Array,
+      default: []
+    },
+    user: {
+      type: Object,
+      default: {
+        user_id: 1,
+        username: 'Default User'
+      }
+    },
+    isLoggedin: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     changeOrderBy(obj) {
       this.orderBy = obj;
+    },
+    logout() {
+
     }
   },
   computed: {
     profileUrl() {
       return "/profile/" + this.user.userId;
-    },
-    games() {
-      return this.$store.getters.getGames;
     }
   }
 };

@@ -13,7 +13,7 @@ const store = () => {
       getGames(state) {
         return state.games
       },
-      getGames(state) {
+      getGame(state) {
         return state.game
       },
       getForumPosts(state) {
@@ -44,29 +44,13 @@ const store = () => {
       },
     },
     actions: {
-      actLogIn(state, params) {
-        this.$axios
-          .$get("http://127.0.0.1:5000/login")
+      nuxtServerInit(vuexState, context) {
+        return context.app.$axios
+          .$get("http://127.0.0.1:5000/games")
           .then(response => {
-            state.commit("mutateUser", response.user);
-            state.commit('mutateIsLoggedin', response.isLoggedin)
-            alert(response.message)
+            vuexState.commit('mutateGames', response.games)
           })
           .catch(error => console.log(error));
-      },
-      actRegister(state, params) {
-        return this.$axios
-          .$post('http://127.0.0.1:5000/register', params)
-          .then(response => {
-            alert(response.message)
-            if (response.user) {
-              state.commit('mutateUser', response.user)
-            }
-          })
-          .catch(error => {
-            console.log(error)
-            alert('Could not create an account!')
-          })
       }
     }
   });

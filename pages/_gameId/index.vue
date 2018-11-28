@@ -3,8 +3,8 @@
     <b-row>
       <b-col md="12">
         <div class="text-center mt-3">
-          <h1></h1>
-          <p>Click on one of the games below to navigate to it</p>
+          <h1>{{ game.game_name }}</h1>
+          <p></p>
         </div>
         <b-row>
           <b-col md="6">
