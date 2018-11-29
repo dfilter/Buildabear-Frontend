@@ -88,7 +88,7 @@ export default {
   },
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/forumPost", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/forumPost", {
         params: { post_id: context.params.forumPostId }
       })
       .then(response => {
@@ -110,7 +110,7 @@ export default {
   methods: {
     addComment(post_id, reply_id=0) {
       this.$axios
-        .$post("http://127.0.0.1:5000/comment", {
+        .$post("https://dfiltercapstone-buildabear-api.herokuapp.com/comment", {
           user_id: this.$store.getters.getUser.user_id,
           comment: this.new_comment,
           reply_id: reply_id,
@@ -124,7 +124,7 @@ export default {
     },
     putRating(obj) {
       this.$axios
-        .$put("http://127.0.0.1:5000/rating", obj)
+        .$put("https://dfiltercapstone-buildabear-api.herokuapp.com/rating", obj)
         .then(response => {
           console.log(response)
         })
@@ -152,7 +152,7 @@ export default {
     },
     subscribe(author_id) {
       this.$axios
-        .$post("http://127.0.0.1:5000/subscription", {
+        .$post("https://dfiltercapstone-buildabear-api.herokuapp.com/subscription", {
           author_id: author_id,
           user_id: this.$store.getters.getUser.user_id
         })

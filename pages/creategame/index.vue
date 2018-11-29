@@ -67,7 +67,7 @@ export default {
   methods: {
     onSubmit() {
       this.$axios
-        .post('http://127.0.0.1:5000/game', this.game)
+        .post('https://dfiltercapstone-buildabear-api.herokuapp.com/game', this.game)
         .then(response => {
           console.log(response)
           if (response.status == 200) {

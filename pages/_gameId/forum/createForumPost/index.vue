@@ -49,7 +49,7 @@ export default {
   methods: {
     onSubmit() {
       this.$axios
-        .post('http://127.0.0.1:5000/forumPost',  {
+        .post('https://dfiltercapstone-buildabear-api.herokuapp.com/forumPost',  {
           ...this.forum_post,
           game_id: this.$store.getters.getGame.game_id,
           user_id: this.$store.getters.getUser.user_id

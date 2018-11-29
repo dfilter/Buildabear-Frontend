@@ -45,7 +45,7 @@
 export default {
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/game", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/game", {
         params: { game_id: context.params.gameId }
       })
       .then(response => {

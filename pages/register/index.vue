@@ -70,7 +70,7 @@ export default {
     onSubmit() {
       if (this.user.password === this.user.confirmPassword) {
         this.$axios
-          .$post('http://127.0.0.1:5000/register', this.user)
+          .$post('https://dfiltercapstone-buildabear-api.herokuapp.com/register', this.user)
           .then(response => {
             alert(response.message)
             if (response.user) {

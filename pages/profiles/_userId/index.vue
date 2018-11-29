@@ -128,7 +128,7 @@
 export default {
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/profile", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/profile", {
         params: {
           user_id: context.params.userId,
           username: null,
@@ -151,18 +151,18 @@ export default {
       this.deleteMethod({
         build_id: build_id,
         rating_id: rating_id
-      }, 'http://127.0.0.1:5000/build')
+      }, 'https://dfiltercapstone-buildabear-api.herokuapp.com/build')
     },
     deletePost(post_id, rating_id) {
       this.deleteMethod({
         post_id: post_id,
         rating_id: rating_id
-      }, 'http://127.0.0.1:5000/forumPost')
+      }, 'https://dfiltercapstone-buildabear-api.herokuapp.com/forumPost')
     },
     unsubscribe(subscription_id, index) {
       this.deleteMethod({
         subscription_id: subscription_id
-      }, 'http://127.0.0.1:5000/subscription')
+      }, 'https://dfiltercapstone-buildabear-api.herokuapp.com/subscription')
       this.user_profile.user_subscriptions.splice(index, 1)
     },
     deleteMethod(params, url) {
