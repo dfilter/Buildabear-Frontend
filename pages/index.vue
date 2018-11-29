@@ -8,7 +8,7 @@
         </div>
         <b-row>
           <b-col md="3" v-for="(game, index) in games" :key="index">
-            <a :href="'/' + game.game_id">
+            <nuxt-link :to="'/' + game.game_id">
               <b-card
                   no-body
                   :img-src="game.game_image"
@@ -20,9 +20,9 @@
                   :footer="game.game_name"
                   footer-tag="footer">
               </b-card>
-            </a>
+            </nuxt-link>
           </b-col>
-          <b-col md="3">
+          <b-col md="3" v-if="$store.getters.getIsLoggedin">
             <nuxt-link to="/creategame">
               <b-card
                   no-body

@@ -8,6 +8,7 @@
         </div>
         <nuxt-link 
             class="custom-link"
+            v-if="$store.getters.getIsLoggedin"
             :to="$route.fullPath +'/createForumPost'">
           <b-card 
               class="mb-4">

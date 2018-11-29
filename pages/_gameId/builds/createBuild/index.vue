@@ -10,22 +10,6 @@
           <b-card-body>
             <b-form @submit.prevent="onSubmit">
               <b-form-group
-                  label="Game Id (Placeholder):">
-                <b-form-input 
-                    type="text"
-                    v-model="build.game_id"
-                    required>
-                </b-form-input>
-              </b-form-group>
-              <b-form-group
-                  label="User Id (Placeholder):">
-                <b-form-input 
-                    type="text"
-                    v-model="build.user_id"
-                    required>
-                </b-form-input>
-              </b-form-group>
-              <b-form-group
                   label="Build Title:">
                 <b-form-input 
                     type="text"
@@ -67,8 +51,6 @@ export default {
       build: {
         build_description: '',
         build_markup: '',
-        game_id: '',
-        user_id: '',
         image_url: ''
       }
     }
@@ -76,7 +58,11 @@ export default {
   methods: {
     onSubmit() {
       this.$axios
-        .post('http://127.0.0.1:5000/build', this.build)
+        .post('http://127.0.0.1:5000/build',  {
+          ...this.build,
+          game_id: this.$store.getters.getGame.game_id,
+          user_id: this.$store.getters.getUser.user_id
+        })
         .then(response => {
           console.log(response)
         })

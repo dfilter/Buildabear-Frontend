@@ -10,22 +10,6 @@
           <b-card-body>
             <b-form @submit.prevent="onSubmit">
               <b-form-group
-                  label="Game Id (placeholder):">
-                <b-form-input 
-                    type="text"
-                    v-model="forum_post.game_id"
-                    required>
-                </b-form-input>
-              </b-form-group>
-              <b-form-group
-                  label="Author Id (placeholder):">
-                <b-form-input 
-                    type="text"
-                    v-model="forum_post.user_id"
-                    required>
-                </b-form-input>
-              </b-form-group>
-              <b-form-group
                   label="Post Title:">
                 <b-form-input 
                     type="text"
@@ -57,8 +41,6 @@ export default {
   data() {
     return {
       forum_post: {
-        game_id: '',
-        user_id: '',
         post_description: '',
         post_text: ''
       }
@@ -67,7 +49,11 @@ export default {
   methods: {
     onSubmit() {
       this.$axios
-        .post('http://127.0.0.1:5000/forumPost', this.forum_post)
+        .post('http://127.0.0.1:5000/forumPost',  {
+          ...this.forum_post,
+          game_id: this.$store.getters.getGame.game_id,
+          user_id: this.$store.getters.getUser.user_id
+        })
         .then(response => {
           console.log(response)
         })

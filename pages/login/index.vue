@@ -2,9 +2,8 @@
   <b-container>
     <b-row>
       <b-col md="6" class="mt-4 offset-3">
-        <b-card title="Login">
-          <p class="card-text">
-            <b-form @submit="onSubmit">
+        <b-card title="Reset Password">
+          <b-form @submit.prevent="onSubmit">
             <b-form-group label="Email address:">
               <b-form-input
                   type="email"
@@ -22,9 +21,10 @@
               </b-form-input>
             </b-form-group>
             <b-button type="submit" variant="primary">Login</b-button>
-            <b-button type="button" href="/register">Don't Have an Account? Make one!</b-button>
+            <b-button type="button" @click="$router.push('/register')">Register</b-button>
+            <b-button type="button" @click="$router.push('/passwordReset')">Forgot Password</b-button>
           </b-form>
-          </p>
+          <p class="card-text mt-2">Please note that login will only persist if page is not manually refreshed.</p>
         </b-card>
       </b-col>
     </b-row>
@@ -43,17 +43,21 @@ export default {
   },
   methods: {
     onSubmit() {
-      if (login.email && login.password)
+      if (this.login.email && this.login.password){
         this.$axios
-          .$post("http://127.0.0.1:5000/login", params)
+          .$post("http://127.0.0.1:5000/login", this.login)
           .then(response => {
-            this.$store.commit("mutateUser", response.user)
-            this.$store.commit('mutateIsLoggedin', response.isLoggedin)
-            this.$router.push('/')
-            alert(response.message)
+            console.log(response)
+            if (response.user) {
+              this.$store.commit("mutateUser", response.user)
+              this.$store.commit('mutateIsLoggedin', true)
+              this.$router.push('/')
+            } else {
+              alert(response.message)
+            }
           })
           .catch(error => console.log(error))
-      this.$store.dispatch('actLogIn', this.login)
+      }
     }
   }
 };

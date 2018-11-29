@@ -1,14 +1,14 @@
 <template>
   <b-navbar toggleable="md" type="dark" variant="info">
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-    <b-navbar-brand href="/">Buildabear</b-navbar-brand>
+    <b-navbar-brand class="custom-hover" @click="$router.push('/')">Buildabear</b-navbar-brand>
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
         <b-nav-item-dropdown text="Game" right>
           <b-dropdown-item 
               v-for="(game, index) in games" 
               :key="index" 
-              :href="'/' + game.game_id">{{ game.game_name }}</b-dropdown-item>
+              @click="$router.push('/' + game.game_id)">{{ game.game_name }}</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
 
@@ -33,10 +33,10 @@
             <em>{{ user.username }}</em>
           </template>
           <b-dropdown-item 
-              :href="'/profiles/' + user.user_id">Profile</b-dropdown-item>
-          <b-dropdown-item @click="logout()">Logout</b-dropdown-item>
+              @click="$router.push('/profiles/' + user.user_id)">Profile</b-dropdown-item>
+          <b-dropdown-item href="/">Logout</b-dropdown-item>
         </b-nav-item-dropdown>
-        <b-nav-item href="/login">Login</b-nav-item>
+        <b-nav-item @click="$router.push('/login')" v-else>Login</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -80,15 +80,17 @@ export default {
     changeOrderBy(obj) {
       this.orderBy = obj;
     },
-    logout() {
-
-    }
   },
   computed: {
     profileUrl() {
-      return "/profile/" + this.user.userId;
+      return "/profiles/" + this.user.userId;
     }
   }
 };
 </script>
 
+<style scoped>
+.custom-hover:hover {
+  cursor: pointer;
+}
+</style>

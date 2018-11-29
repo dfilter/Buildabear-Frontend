@@ -11,19 +11,19 @@
                 size="sm" 
                 type="button" 
                 variant="success"
-                :disabled="!isLoggedin"
+                :disabled="!isLoggedin || isSubscribed || isPostOwner"
                 @click="subscribe(build.author_id)"><font-awesome-icon :icon="['far', 'plus-square']" /> Subscribe</b-button>
             <b-button 
                 size="sm" 
                 type="button" 
                 variant="success"
-                :disabled="!isLoggedin"
+                :disabled="!isLoggedin || isPostOwner"
                 @click="like(build.rating_id)"><font-awesome-icon :icon="['far', 'thumbs-up']" /> Like {{ build.up_vote }}</b-button>
             <b-button 
                 size="sm" 
                 type="button" 
                 variant="danger"
-                :disabled="!isLoggedin"
+                :disabled="!isLoggedin || isPostOwner"
                 @click="dislike(build.rating_id)"><font-awesome-icon :icon="['far', 'thumbs-down']" /> Dislike {{ build.down_vote }}</b-button>
             <b-button 
                 size="sm" 
@@ -35,32 +35,35 @@
           </div>
           <p class="card-text">{{ build.build_markup }}</p>
         </b-card>
-        <b-card>
+        <b-card
+            sub-title="User Comments">
           <b-card-body>
-            <b-form-input 
-              v-model="newComment.user_id"
-              placeholder="User ID (placeholder)">
-            </b-form-input >
-            <b-button @click="addComment(build.build_id)">Add a Comment</b-button>
-            <b-form-textarea 
-              v-model="newComment.comment"
-              :rows="3"
-              :max-rows="6">
-            </b-form-textarea>
+            <b-form 
+                v-if="$store.getters.getIsLoggedin"
+                @submit.prevent="addComment(build.build_id)">
+              <b-button type="submit">Add a Comment</b-button>
+              <b-form-textarea 
+                  v-model="new_comment"
+                  :rows="3"
+                  :max-rows="6">
+              </b-form-textarea>
+            </b-form>
             <b-card
                 v-for="(comment, index) in build.comments"
                 :key="index"
                 class="mt-3">
               <p class="card-text">{{ comment.comment }}</p>
               <div slot="footer">
-                <nuxt-link class="mr-2" :to="'/profile/' + comment.user_id">By: {{ comment.username }}</nuxt-link>
-                <b-link class="mr-2" @click="like(comment.rating_id)" :disabled="!isLoggedin">
-                  <font-awesome-icon :icon="['far', 'thumbs-up']" /> Like {{ comment.up_vote }}
-                </b-link>
-                <b-link @click="dislike(comment.rating_id)" :disabled="!isLoggedin">
-                  <font-awesome-icon :icon="['far', 'thumbs-down']" /> Dislike {{ comment.down_vote }}
-                </b-link>
-                <span class="float-right">Date Posted: {{ new Date(build.date_posted) | moment("dddd, MMMM Do YYYY, h:mm:ss a") }}</span>
+                <nuxt-link class="mr-2" :to="'/profiles/' + comment.user_id">By: {{ comment.username }}</nuxt-link>
+                <span v-if="$store.getters.getIsLoggedin">
+                  <b-link class="mr-2" @click="like(comment.rating_id, index)">
+                    <font-awesome-icon :icon="['far', 'thumbs-up']" /> Like {{ comment.up_vote }}
+                  </b-link>
+                  <b-link @click="dislike(comment.rating_id, index)">
+                    <font-awesome-icon :icon="['far', 'thumbs-down']" /> Dislike {{ comment.down_vote }}
+                  </b-link>
+                </span>
+                <span class="float-right">Date Posted: {{ new Date(comment.date_posted) | moment("dddd, MMMM Do YYYY, h:mm:ss a") }}</span>
               </div>
             </b-card>
           </b-card-body>
@@ -74,15 +77,11 @@
 export default {
   data() {
     return {
-      newComment: {
-        comment: "",
-        user_id: "",
-        reply_id: 0
-      }
+      new_comment: "",
+      reply_id: 0
     };
   },
   asyncData(context) {
-    // add something to increment viewcount
     return context.app.$axios
       .$get("http://127.0.0.1:5000/build", {
         params: { build_id: context.params.buildId }
@@ -94,17 +93,26 @@ export default {
       })
       .catch(error => console.log(error))
   },
+  mounted() {
+    this.putRating({
+      rating_id: this.build.rating_id,
+      up_vote: null,
+      down_vote: null,
+      view: 1
+    })
+  },
   methods: {
-    addComment(post_id) {
+    addComment(build_id, reply_id=0) {
       this.$axios
         .$post("http://127.0.0.1:5000/comment", {
-          comment: this.newComment.comment,
-          user_id: this.newComment.user_id,
-          reply_id: this.newComment.reply_id,
-          associated_id: post_id
+          user_id: this.$store.getters.getUser.user_id,
+          comment: this.new_comment,
+          reply_id: reply_id,
+          associated_id: build_id
         })
         .then(response => {
-          // add comment
+          console.log(response)
+          this.build.comments.push(response.comment)
         })
         .catch(error => console.log(error))
     },
@@ -118,25 +126,27 @@ export default {
           console.log(error)
         })
     },
-    like(rating_id, up_vote=1) {
+    like(rating_id, index, up_vote=1) {
       this.putRating({
         rating_id: rating_id,
         up_vote: up_vote,
         down_vote: null,
         view: null
       })
+      this.build.comments[index].up_vote++
     },
-    dislike(rating_id, down_vote=1) {
+    dislike(rating_id, index, down_vote=1) {
       this.putRating({
         rating_id: rating_id,
         up_vote: null,
         down_vote: down_vote,
         view: null
       })
+      this.build.comments[index].down_vote++
     },
     subscribe(author_id) {
       this.$axios
-        .$put("http://127.0.0.1:5000/subscription", {
+        .$post("http://127.0.0.1:5000/subscription", {
           author_id: author_id,
           user_id: this.$store.getters.getUser.user_id
         })
@@ -151,6 +161,12 @@ export default {
   computed: {
     isLoggedin() {
       return this.$store.getters.getIsLoggedin
+    },
+    isSubscribed() {
+      return this.$store.getters.getUser.subscriptions.includes(this.build.author_id)
+    },
+    isPostOwner() {
+      return this.$store.getters.getUser.user_id == this.build.author_id
     }
   }
 };
