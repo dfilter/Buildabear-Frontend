@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
-import { far, faThumbsUp, faThumbsDown, faEye, faPlusSquare, faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+import { far, faThumbsUp, faThumbsDown, faEye, faPlusSquare, faTimesCircle, faEdit } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(far)
+library.add(faEdit)
 library.add(faEye)
 library.add(faPlusSquare)
 library.add(faThumbsUp)

@@ -5,26 +5,27 @@
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
         <b-nav-item-dropdown text="Game" right>
-          <b-dropdown-item 
-              v-for="(game, index) in games" 
-              :key="index" 
-              @click="$router.push('/' + game.game_id)">{{ game.game_name }}</b-dropdown-item>
+          <b-dropdown-item
+            v-for="(game, index) in games"
+            :key="index"
+            @click="$router.push('/' + game.game_id)"
+          >{{ game.game_name }}</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-
         <b-nav-form>
           <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
           <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
         </b-nav-form>
 
         <b-nav-item-dropdown text="Search by" right>
-          <b-dropdown-item 
-              v-for="(item, index) in searchBy" 
-              :key="index" 
-              @click="changeOrderBy(item)">{{ item.text }}</b-dropdown-item>
+          <b-dropdown-item
+            v-for="(item, index) in searchBy"
+            :key="index"
+            @click="changeOrderBy(item)"
+          >{{ item.text }}</b-dropdown-item>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown right v-if="isLoggedin">
@@ -32,11 +33,10 @@
           <template slot="button-content">
             <em>{{ user.username }}</em>
           </template>
-          <b-dropdown-item 
-              @click="$router.push('/profiles/' + user.user_id)">Profile</b-dropdown-item>
+          <b-dropdown-item @click="$router.push('/profile/' + user.user_id)">Profile</b-dropdown-item>
           <b-dropdown-item href="/">Logout</b-dropdown-item>
         </b-nav-item-dropdown>
-        <b-nav-item @click="$router.push('/login')" v-else>Login</b-nav-item>
+        <b-nav-item @click="$router.push('/auth/login')" v-else>Login</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -68,7 +68,7 @@ export default {
       type: Object,
       default: {
         user_id: 1,
-        username: 'Default User'
+        username: "Default User"
       }
     },
     isLoggedin: {
@@ -79,11 +79,11 @@ export default {
   methods: {
     changeOrderBy(obj) {
       this.orderBy = obj;
-    },
+    }
   },
   computed: {
     profileUrl() {
-      return "/profiles/" + this.user.userId;
+      return "/profile/" + this.user.userId;
     }
   }
 };

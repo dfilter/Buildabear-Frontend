@@ -7,6 +7,7 @@ const store = () => {
       game: {},
       forumPosts: [],
       user: {},
+      updateProfileId: null,
       isLoggedin: false,
     }),
     getters: {
@@ -25,6 +26,9 @@ const store = () => {
       getIsLoggedin(state) {
         return state.isLoggedin
       },
+      getUpdateProfileId(state) {
+        return state.updateProfileId
+      }
     },
     mutations: {
       mutateGames(state, games) {
@@ -42,11 +46,14 @@ const store = () => {
       mutateIsLoggedin(state, isLoggedin) {
         state.isLoggedin = isLoggedin
       },
+      mutateUpdateProfileId(state, user_id) {
+        state.updateProfileId = user_id
+      },
     },
     actions: {
       nuxtServerInit(vuexState, context) {
         return context.app.$axios
-          .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/games")
+          .$get("http://127.0.0.1:5000/games")
           .then(response => {
             vuexState.commit('mutateGames', response.games)
           })

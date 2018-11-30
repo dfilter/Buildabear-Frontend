@@ -46,7 +46,7 @@
 export default {
   asyncData(context) {
     return context.app.$axios
-      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/games")
+      .$get("http://127.0.0.1:5000/games")
       .then(response => {
         context.store.commit('mutateGames', response.games)
         return {

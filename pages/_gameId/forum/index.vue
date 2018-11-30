@@ -58,7 +58,7 @@ export default {
       desending: true
     }
     return context.app.$axios
-      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/forumPosts", { 
+      .$get("http://127.0.0.1:5000/forumPosts", { 
         params: params
       })
       .then(response => {
