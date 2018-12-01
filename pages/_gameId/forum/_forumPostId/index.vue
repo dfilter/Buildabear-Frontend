@@ -102,7 +102,7 @@ export default {
   },
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/forumPost", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/forumPost", {
         params: { post_id: context.params.forumPostId }
       })
       .then(response => {
@@ -124,7 +124,7 @@ export default {
   methods: {
     addComment(post_id, reply_id = 0) {
       this.$axios
-        .$post("http://127.0.0.1:5000/comment", {
+        .$post("https://dfiltercapstone-buildabear-api.herokuapp.com/comment", {
           user_id: this.$store.getters.getUser.user_id,
           comment: this.new_comment,
           reply_id: reply_id,
@@ -138,7 +138,7 @@ export default {
     },
     putRating(obj) {
       this.$axios
-        .$put("http://127.0.0.1:5000/rating", obj)
+        .$put("https://dfiltercapstone-buildabear-api.herokuapp.com/rating", obj)
         .then(response => {
           console.log(response);
         })
@@ -153,7 +153,11 @@ export default {
         down_vote: null,
         view: null
       });
-      this.forum_post.comments[index].up_vote++;
+      if (index) {
+        this.forum_post.comments[index].up_vote++;
+      } else {
+         this.forum_post.up_vote++
+      }
     },
     dislike(rating_id, index, down_vote = 1) {
       this.putRating({
@@ -162,11 +166,15 @@ export default {
         down_vote: down_vote,
         view: null
       });
-      this.forum_post.comments[index].down_vote++;
+      if (index) {
+        this.forum_post.comments[index].down_vote++;
+      } else {
+         this.forum_post.down_vote++
+      }
     },
     deleteComment(comment_id, rating_id, index) {
       this.$axios
-        .$delete("http://127.0.0.1:5000/comment", {
+        .$delete("https://dfiltercapstone-buildabear-api.herokuapp.com/comment", {
           params: {
             comment_id: comment_id,
             rating_id: rating_id
@@ -179,8 +187,11 @@ export default {
         .catch(error => console.log(error));
     },
     subscribe(author_id) {
+      let tempUser = this.$store.getters.getUser
+      tempUser.subscriptions.push(author_id)
+      this.$store.commit('mutateUser', tempUser)
       this.$axios
-        .$post("http://127.0.0.1:5000/subscription", {
+        .$post("https://dfiltercapstone-buildabear-api.herokuapp.com/subscription", {
           author_id: author_id,
           user_id: this.$store.getters.getUser.user_id
         })

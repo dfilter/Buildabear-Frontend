@@ -54,7 +54,7 @@
 export default {
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/user", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/user", {
         params: {
           user_id: context.params.userId
         }
@@ -70,7 +70,7 @@ export default {
   methods: {
     onSubmit() {
       this.$axios
-        .$put("http://127.0.0.1:5000/profile", this.user)
+        .$put("https://dfiltercapstone-buildabear-api.herokuapp.com/profile", this.user)
         .then(response => {
           console.log(response);
         })
@@ -78,7 +78,7 @@ export default {
     },
     deleteUser(user_id) {
       this.$axios
-        .$delete("http://127.0.0.1:5000/profile", {
+        .$delete("https://dfiltercapstone-buildabear-api.herokuapp.com/profile", {
           params: {
             user_id: user_id
           }

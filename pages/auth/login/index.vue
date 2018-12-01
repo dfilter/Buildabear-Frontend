@@ -47,7 +47,7 @@ export default {
     onSubmit() {
       if (this.login.email && this.login.password) {
         this.$axios
-          .$post("http://127.0.0.1:5000/login", this.login)
+          .$post("https://dfiltercapstone-buildabear-api.herokuapp.com/login", this.login)
           .then(response => {
             console.log(response);
             if (response.user) {

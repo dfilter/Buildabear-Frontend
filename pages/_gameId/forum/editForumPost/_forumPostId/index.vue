@@ -36,7 +36,7 @@
 export default {
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/forumPost", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/forumPost", {
         params: { post_id: context.params.forumPostId }
       })
       .then(response => {
@@ -50,7 +50,7 @@ export default {
   methods: {
     onSubmit() {
       this.$axios
-        .$put("http://127.0.0.1:5000/forumPost", this.forum_post)
+        .$put("https://dfiltercapstone-buildabear-api.herokuapp.com/forumPost", this.forum_post)
         .then(response => {
           console.log(response);
           this.$router.push('/' + this.forum_post.game_id + '/forum/' + this.forum_post.post_id)
@@ -59,7 +59,7 @@ export default {
     },
     deletePost() {
       this.$axios
-        .$delete("http://127.0.0.1:5000/forumPost", {
+        .$delete("https://dfiltercapstone-buildabear-api.herokuapp.com/forumPost", {
           params: {
             post_id: this.forum_post.post_id,
             rating_id: this.forum_post.rating_id

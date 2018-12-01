@@ -59,7 +59,7 @@ export default {
       desending: true
     };
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/builds", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/builds", {
         params: params
       })
       .then(response => {

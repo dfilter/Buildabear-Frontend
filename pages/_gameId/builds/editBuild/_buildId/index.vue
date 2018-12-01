@@ -44,7 +44,7 @@
 export default {
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/build", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/build", {
         params: { build_id: context.params.buildId }
       })
       .then(response => {
@@ -58,7 +58,7 @@ export default {
   methods: {
     onSubmit() {
       this.$axios
-        .$put("http://127.0.0.1:5000/build", this.build)
+        .$put("https://dfiltercapstone-buildabear-api.herokuapp.com/build", this.build)
         .then(response => {
           console.log(response);
           this.$router.push('/' + this.build.game_id + '/builds/' + this.build.build_id)
@@ -67,7 +67,7 @@ export default {
     },
     deleteBuild() {
       this.$axios
-        .$delete("http://127.0.0.1:5000/build", {
+        .$delete("https://dfiltercapstone-buildabear-api.herokuapp.com/build", {
           params: {
             build_id: this.build.build_id,
             rating_id: this.build.rating_id

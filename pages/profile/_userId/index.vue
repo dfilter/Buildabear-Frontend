@@ -9,7 +9,7 @@
           <b-card-body>
             <p class="card-text">{{ user_profile.user_description }}</p>
             <b-card
-              v-if="user_profile.user_subscriptions > 0"
+              v-if="user_profile.user_subscriptions.length > 0"
               title="Subscriptions"
               :sub-title="'Total Subscriptions: ' + user_profile.user_subscriptions.length"
             >
@@ -160,7 +160,7 @@
 export default {
   asyncData(context) {
     return context.app.$axios
-      .$get("http://127.0.0.1:5000/profile", {
+      .$get("https://dfiltercapstone-buildabear-api.herokuapp.com/profile", {
         params: {
           user_id: context.params.userId,
           username: null,
@@ -185,7 +185,7 @@ export default {
           build_id: build_id,
           rating_id: rating_id
         },
-        "http://127.0.0.1:5000/build"
+        "https://dfiltercapstone-buildabear-api.herokuapp.com/build"
       );
     },
     deletePost(post_id, rating_id) {
@@ -194,7 +194,7 @@ export default {
           post_id: post_id,
           rating_id: rating_id
         },
-        "http://127.0.0.1:5000/forumPost"
+        "https://dfiltercapstone-buildabear-api.herokuapp.com/forumPost"
       );
     },
     unsubscribe(subscription_id, index) {
@@ -202,7 +202,7 @@ export default {
         {
           subscription_id: subscription_id
         },
-        "http://127.0.0.1:5000/subscription"
+        "https://dfiltercapstone-buildabear-api.herokuapp.com/subscription"
       );
       this.user_profile.user_subscriptions.splice(index, 1);
     },
@@ -215,7 +215,7 @@ export default {
           {
             user_id: this.user_profile.user_id
           },
-          "http://127.0.0.1:5000/profile"
+          "https://dfiltercapstone-buildabear-api.herokuapp.com/profile"
         );
         this.$router.push("/");
       }

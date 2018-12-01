@@ -70,7 +70,7 @@ export default {
       if (this.step1.email && this.step1.username) {
         this.$axios
           .$post(
-            "http://127.0.0.1:5000/checkuser",
+            "https://dfiltercapstone-buildabear-api.herokuapp.com/checkuser",
             this.step1
           )
           .then(response => {
@@ -87,7 +87,7 @@ export default {
       if (this.step2.password === this.step2.confirm_password) {
         this.$axios
           .$post(
-            "http://127.0.0.1:5000/resetpassword",
+            "https://dfiltercapstone-buildabear-api.herokuapp.com/resetpassword",
             {
               password: this.step2.password,
               username: this.step1.username
